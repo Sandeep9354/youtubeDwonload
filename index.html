@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Downloader</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f4f4f4;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-control {
+            border-radius: 50px;
+            padding: 15px;
+            background: #e0e0e0;
+            border: none;
+            color: #333;
+        }
+        .form-control::placeholder {
+            color: #666;
+        }
+        .btn-custom {
+            background: #1e90ff;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            transition: 0.3s;
+        }
+        .btn-custom:hover {
+            background: #1565c0;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input-group input {
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .input-group button {
+            width: 100%;
+        }
+        form-control:focus {
+    color: var(--bs-body-color);
+    background-color:none !important;
+    box-shadow:none !important;
+    border-color:none !important;
+    outline: 0px;
+}
+        @media (min-width: 768px) {
+            .input-group {
+                flex-direction: row;
+            }
+            .input-group input {
+                width: auto;
+                margin-bottom: 0;
+                text-align: left;
+            }
+            .input-group button {
+                width: auto;
+            }
+        }
+        @media (max-width:768px) {
+          .form-control{
+              border-radius: 10px !important;
+              width: 100% !important;
+            }
+            .btn-custom{
+              border-radius: 10px !important;
+            }
+        }
+        .progress {
+            height: 25px;
+            margin-top: 15px;
+            display: none; /* Hidden initially */
+        }
+        .progress-bar {
+            width: 0%;
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <h2 class="mb-4">YouTube Video Downloader</h2>
+                <p class="text-muted">Paste the YouTube video link below and download instantly</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="videoURL" placeholder="Enter YouTube URL">
+                    <button class="btn btn-custom" onclick="downloadVideo()">Download</button>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" id="progressBar" style="width: 0%;">0%</div>
+                </div>
+
+                <!-- Status Message -->
+                <p id="statusMessage" class="mt-3 text-muted"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+   
+    function downloadVideo() {
+        var url = document.getElementById("videoURL").value;
+        if (url === "") {
+            alert("Please enter a YouTube URL");
+            return;
+        }
+
+        var progressBar = document.getElementById("progressBar");
+        var progressContainer = document.querySelector(".progress");
+        var statusMessage = document.getElementById("statusMessage");
+
+        progressContainer.style.display = "block";  // Show progress bar
+        progressBar.style.width = "0%";  // Reset progress
+        progressBar.innerText = "0%";
+        statusMessage.innerText = "Starting download...";
+
+        fetch("http://127.0.0.1:5000/download", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ video_url: url })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Download failed");
+
+            return response.blob();
+        })
+        .then(blob => {
+            var downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = "YouTube_Video.mp4";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            statusMessage.innerText = "Download Complete!";
+            progressBar.style.width = "100%";
+            progressBar.innerText = "100%";
+        })
+        .catch(error => {
+            statusMessage.innerText = "Error: " + error.message;
+        });
+    }
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+       
