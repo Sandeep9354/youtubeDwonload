@@ -4,6 +4,8 @@ import os
 import subprocess
 import time
 from datetime import datetime
+import sys
+
 yt_dlp_path = subprocess.run("which yt-dlp", shell=True, capture_output=True, text=True).stdout.strip()
 print(f"yt-dlp path found: {yt_dlp_path}", file=sys.stderr)
 
@@ -28,10 +30,11 @@ def download():
 
         # yt-dlp command to download video
         command = [
-        'yt-dlp',  
-            '-o', video_path,  
-            '-f', 'best',  
-            video_url
+  'yt-dlp',
+    '--cookies-from-browser', 'chrome',  # Use cookies from Chrome directly
+    '-o', video_path,
+    '-f', 'best',
+    video_url
         ]
 
         # Run download command
