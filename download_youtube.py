@@ -30,12 +30,11 @@ def download():
 
         # yt-dlp command to download video
         command = [
-     '/opt/render/project/src/.venv/bin/yt-dlp',
-    '--cookies', 'cookies.txt',
+               '/opt/render/project/src/.venv/bin/yt-dlp',
+    '--cookies', 'cookies.txt',  # Use the uploaded cookies
     '-o', video_path,
-    '-f', 'bv+ba/b',
+             '-f', 'best',  # Download best quality format
     video_url
-
         ]
 
         # Run download command
