@@ -8,8 +8,8 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend communication
 
-DOWNLOAD_FOLDER = os.path.join(os.getcwd(), "downloads")  
-os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
+DOWNLOAD_FOLDER = os.path.expanduser(r'C:\Users\kumar\Downloads')  # Save videos in Downloads
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)  # Ensure folder exists
 
 @app.route('/download', methods=['POST'])
 def download():
@@ -26,10 +26,10 @@ def download():
 
         # yt-dlp command to download video
         command = [
-          'yt-dlp',  # Let the system find the installed yt-dlp
-    '-o', video_path,  
-    '-f', 'best',  
-    video_url
+            r'C:\Users\kumar\AppData\Roaming\Python\Python313\Scripts\yt-dlp.exe',
+            '-o', video_path,  
+            '-f', 'best',  # Download best quality format
+            video_url
         ]
 
         # Run download command
