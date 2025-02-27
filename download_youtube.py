@@ -4,6 +4,8 @@ import os
 import subprocess
 import time
 from datetime import datetime
+yt_dlp_path = subprocess.run("which yt-dlp", shell=True, capture_output=True, text=True).stdout.strip()
+print(f"yt-dlp path found: {yt_dlp_path}", file=sys.stderr)
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend communication
