@@ -4,16 +4,12 @@ import os
 import subprocess
 import time
 from datetime import datetime
-import sys
-
-yt_dlp_path = subprocess.run("which yt-dlp", shell=True, capture_output=True, text=True).stdout.strip()
-print(f"yt-dlp path found: {yt_dlp_path}", file=sys.stderr)
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend communication
 
-DOWNLOAD_FOLDER = os.path.join(os.getcwd(), "downloads")  
-os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
+DOWNLOAD_FOLDER = os.path.expanduser(r'C:\Users\kumar\Downloads')  # Save videos in Downloads
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)  # Ensure folder exists
 
 @app.route('/download', methods=['POST'])
 def download():
@@ -29,14 +25,12 @@ def download():
         video_path = os.path.join(DOWNLOAD_FOLDER, f"YouTube_Video_{current_date}.mp4")
 
         # yt-dlp command to download video
-   command = [
-    '/opt/render/project/src/.venv/bin/yt-dlp',
-    '--cookies', 'cookies.txt',  # Use cookies file
-    '-o', video_path,
-    '-f', 'bv+ba/b',
-    video_url
-]
-
+        command = [
+            r'C:\Users\kumar\AppData\Roaming\Python\Python313\Scripts\yt-dlp.exe',
+            '-o', video_path,  
+            '-f', 'best',  # Download best quality format
+            video_url
+        ]
 
         # Run download command
         subprocess.run(command, check=True)
