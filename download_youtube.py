@@ -30,10 +30,10 @@ def download():
 
         # yt-dlp command to download video
         command = [
-     '/opt/render/project/src/.venv/bin/yt-dlp',  # Full path to yt-dlp
-    '--cookies', os.path.join(DOWNLOAD_FOLDER, "cookies.txt"),  # Use YouTube cookies
+        '/opt/render/project/src/.venv/bin/yt-dlp',  # Full yt-dlp path
+    '--no-check-certificate',  # Bypass SSL issues
+    '--force-generic-extractor',  # Try generic method if YouTube blocks
     '-o', video_path,  
-    '-f', 'best',  
     video_url
         ]
 
