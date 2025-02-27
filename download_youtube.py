@@ -26,10 +26,10 @@ def download():
 
         # yt-dlp command to download video
         command = [
-        'yt-dlp',  # Let the system find the installed yt-dlp
-    '-o', video_path,  
-    '-f', 'best',  
-    video_url
+        'yt-dlp',  
+            '-o', video_path,  
+            '-f', 'best',  
+            video_url
         ]
 
         # Run download command
