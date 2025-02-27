@@ -95,6 +95,10 @@
             width: 0%;
             transition: width 0.3s ease-in-out;
         }
+        .progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
     </style>
 </head>
 <body>
@@ -110,9 +114,10 @@
                 </div>
                 
                 <!-- Progress Bar -->
-                <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" id="progressBar" style="width: 0%;">0%</div>
-                </div>
+              <div class="progress mt-3">
+    <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
+         role="progressbar" style="width: 0%;">0%</div>
+</div>
 
                 <!-- Status Message -->
                 <p id="statusMessage" class="mt-3 text-muted"></p>
@@ -122,49 +127,40 @@
 </div>
 
 <script>
-   
-    function downloadVideo() {
-        var url = document.getElementById("videoURL").value;
-        if (url === "") {
-            alert("Please enter a YouTube URL");
-            return;
-        }
-
-        var progressBar = document.getElementById("progressBar");
-        var progressContainer = document.querySelector(".progress");
-        var statusMessage = document.getElementById("statusMessage");
-
-        progressContainer.style.display = "block";  // Show progress bar
-        progressBar.style.width = "0%";  // Reset progress
-        progressBar.innerText = "0%";
-        statusMessage.innerText = "Starting download...";
-
-        fetch("http://127.0.0.1:5000/download", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ video_url: url })
-        })
-        .then(response => {
-            if (!response.ok) throw new Error("Download failed");
-
-            return response.blob();
-        })
-        .then(blob => {
-            var downloadLink = document.createElement("a");
-            downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download = "YouTube_Video.mp4";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-
-            statusMessage.innerText = "Download Complete!";
-            progressBar.style.width = "100%";
-            progressBar.innerText = "100%";
-        })
-        .catch(error => {
-            statusMessage.innerText = "Error: " + error.message;
-        });
+   function downloadVideo() {
+    var url = document.getElementById("videoURL").value;
+    if (url === "") {
+        alert("Please enter a YouTube URL");
+        return;
     }
+
+    // Show progress bar at 0%
+    let progressBar = document.getElementById("progress-bar");
+    progressBar.style.width = "0%";
+    progressBar.innerText = "Starting...";
+
+    fetch("https://youtubedwonload-1.onrender.com/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ video_url: url }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message.includes("Processing download")) {
+            progressBar.style.width = "50%";
+            progressBar.innerText = "Downloading...";
+        }
+        setTimeout(() => {
+            progressBar.style.width = "100%";
+            progressBar.innerText = "Download Complete!";
+        }, 5000);
+        alert(data.message);
+    })
+    .catch(error => {
+        alert("Error downloading video: " + error);
+    });
+}
+
 </script>
 
 
