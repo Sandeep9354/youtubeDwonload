@@ -29,13 +29,14 @@ def download():
         video_path = os.path.join(DOWNLOAD_FOLDER, f"YouTube_Video_{current_date}.mp4")
 
         # yt-dlp command to download video
-        command = [
-               '/opt/render/project/src/.venv/bin/yt-dlp',
-    '--cookies', 'cookies.txt',  # Use the uploaded cookies
+   command = [
+    '/opt/render/project/src/.venv/bin/yt-dlp',
+    '--cookies', 'cookies.txt',  # Use cookies file
     '-o', video_path,
-             '-f', 'best',  # Download best quality format
+    '-f', 'bv+ba/b',
     video_url
-        ]
+]
+
 
         # Run download command
         subprocess.run(command, check=True)
