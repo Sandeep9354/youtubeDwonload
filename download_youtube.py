@@ -26,10 +26,12 @@ def download():
 
         # yt-dlp command to download video
         command = [
-            r'C:\Users\kumar\AppData\Roaming\Python\Python313\Scripts\yt-dlp.exe',
-            '-o', video_path,  
-            '-f', 'best',  # Download best quality format
-            video_url
+
+               '/opt/render/project/src/.venv/bin/yt-dlp',
+    '--cookies', 'cookies.txt',  # Use cookies file
+    '-o', video_path,
+    '-f', 'bv+ba/b',
+    video_url
         ]
 
         # Run download command
