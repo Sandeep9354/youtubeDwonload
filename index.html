@@ -127,39 +127,51 @@
 </div>
 
 <script>
-   function downloadVideo() {
+async function downloadVideo() {
     var url = document.getElementById("videoURL").value;
-    if (url === "") {
+    if (!url) {
         alert("Please enter a YouTube URL");
         return;
     }
 
-    // Show progress bar at 0%
     let progressBar = document.getElementById("progress-bar");
     progressBar.style.width = "0%";
     progressBar.innerText = "Starting...";
 
-    fetch("https://youtubedwonload-1.onrender.com/download", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ video_url: url }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message.includes("Processing download")) {
-            progressBar.style.width = "50%";
-            progressBar.innerText = "Downloading...";
+    try {
+        let response = await fetch("https://youtubedwonload-1.onrender.com/download", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ video_url: url }),
+        });
+
+        if (!response.ok) {
+            let errorData = await response.json();
+            throw new Error(errorData.error || "Failed to download");
         }
-        setTimeout(() => {
-            progressBar.style.width = "100%";
-            progressBar.innerText = "Download Complete!";
-        }, 5000);
-        alert(data.message);
-    })
-    .catch(error => {
-        alert("Error downloading video: " + error);
-    });
+
+        progressBar.style.width = "50%";
+        progressBar.innerText = "Downloading...";
+
+        // Convert response to a Blob (video file)
+        let blob = await response.blob();
+        let downloadUrl = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = "YouTube_Video.mp4";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        progressBar.style.width = "100%";
+        progressBar.innerText = "Download Complete!";
+        alert("Download completed successfully!");
+
+    } catch (error) {
+        alert("Error downloading video: " + error.message);
+    }
 }
+
 
 </script>
 
