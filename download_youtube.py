@@ -26,9 +26,9 @@ def download():
 
         # yt-dlp command to download video
         command = [
-
-               '/opt/render/project/src/.venv/bin/yt-dlp',
-    '--cookies', 'cookies.txt',  # Use cookies file
+  '/opt/render/project/src/.venv/bin/yt-dlp',
+    '--cookies', 'cookies.txt',
+    '--extractor-args', 'youtube:player_client=android',
     '-o', video_path,
     '-f', 'bv+ba/b',
     video_url
