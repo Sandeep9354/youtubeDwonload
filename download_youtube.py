@@ -5,6 +5,16 @@ import subprocess
 import time
 from datetime import datetime
 
+import shutil
+
+# Find the full path of yt-dlp
+yt_dlp_path = shutil.which("yt-dlp")
+
+if yt_dlp_path:
+    print(f"yt-dlp found at: {yt_dlp_path}")
+else:
+    print("yt-dlp not found. Make sure it's installed and added to PATH.")
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend communication
 
