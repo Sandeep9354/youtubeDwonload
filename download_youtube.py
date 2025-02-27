@@ -30,10 +30,10 @@ def download():
 
         # yt-dlp command to download video
         command = [
-  'yt-dlp',
-    '--cookies-from-browser', 'chrome',  # Use cookies from Chrome directly
-    '-o', video_path,
-    '-f', 'best',
+     '/opt/render/project/src/.venv/bin/yt-dlp',  # Full path to yt-dlp
+    '--cookies', os.path.join(DOWNLOAD_FOLDER, "cookies.txt"),  # Use YouTube cookies
+    '-o', video_path,  
+    '-f', 'best',  
     video_url
         ]
 
